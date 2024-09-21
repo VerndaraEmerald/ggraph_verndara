@@ -51,13 +51,16 @@ textAlongGrob <- function(label, x = unit(0.5, 'npc'), y = unit(0.5, 'npc'),
 #' @export
 #' @keywords internal
 makeContent.textalong <- function(x) {
-  angle = 0
   x0 <- convertX(x$x0, 'mm', TRUE)
   y0 <- convertY(x$y0, 'mm', TRUE)
   x1 <- convertX(x$x1, 'mm', TRUE)
   y1 <- convertY(x$y1, 'mm', TRUE)
   xpos <- convertX(x$x, 'mm', TRUE)
   ypos <- convertY(x$y, 'mm', TRUE)
+  angle <- edge_angle(x0, y0, x1, y1)
+  if (x$rot.type == 'across') {
+    angle <- angle - 90
+  }
   if (!is.null(x$dodge)) {
     dodge <- convertHeight(x$dodge, 'mm', TRUE)
     dodge_angle <- (angle + 90) / 360 * 2 * pi
@@ -78,9 +81,13 @@ makeContent.textalong <- function(x) {
     fix <- angle > 90 & angle < 270
     angle[fix] <- angle[fix] + 180
   }
+  if(angle > 45){
+    angle = 45}
+  if(angle < -45){
+    angle = -45}
   grob(
     label = x$label, x = unit(xpos, 'mm'), y = unit(ypos, 'mm'),
-    just = x$just, hjust = x$hjust, vjust = x$vjust, rot = 0,
+    just = x$just, hjust = x$hjust, vjust = x$vjust, rot = angle,
     check.overlap = x$check.overlap, name = x$name, gp = x$gp, vp = x$vp,
     cl = 'text'
   )
