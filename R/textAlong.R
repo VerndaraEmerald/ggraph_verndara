@@ -59,13 +59,9 @@ makeContent.textalong <- function(x) {
   ypos <- convertY(x$y, 'mm', TRUE)
   if (!is.null(x$dodge)) {
     dodge <- convertHeight(x$dodge, 'mm', TRUE)
-    xpos <- xpos + dodge_x
-    ypos <- ypos + dodge_y
   }
   if (!is.null(x$push)) {
     push <- convertHeight(x$push, 'mm', TRUE)
-    xpos <- xpos + push_x
-    ypos <- ypos + push_y
   }
   grob(
     label = x$label, x = unit(xpos, 'mm'), y = unit(ypos, 'mm'),
