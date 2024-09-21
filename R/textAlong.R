@@ -81,10 +81,8 @@ makeContent.textalong <- function(x) {
     fix <- angle > 90 & angle < 270
     angle[fix] <- angle[fix] + 180
   }
-  if(angle > 45){
-    angle = 45}
-  if(angle < -45){
-    angle = -45}
+  ifelse(angle > 45, angle = 45,
+         ifelse(angle < -45, angle = -45, angle))
   grob(
     label = x$label, x = unit(xpos, 'mm'), y = unit(ypos, 'mm'),
     just = x$just, hjust = x$hjust, vjust = x$vjust, rot = angle,
