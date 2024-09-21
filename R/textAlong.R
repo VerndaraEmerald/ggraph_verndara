@@ -57,33 +57,19 @@ makeContent.textalong <- function(x) {
   y1 <- convertY(x$y1, 'mm', TRUE)
   xpos <- convertX(x$x, 'mm', TRUE)
   ypos <- convertY(x$y, 'mm', TRUE)
-  angle <- edge_angle(x0, y0, x1, y1)
-  if (x$rot.type == 'across') {
-    angle <- angle - 90
-  }
   if (!is.null(x$dodge)) {
     dodge <- convertHeight(x$dodge, 'mm', TRUE)
-    dodge_angle <- (angle + 90) / 360 * 2 * pi
-    dodge_x <- cos(dodge_angle) * dodge
-    dodge_y <- sin(dodge_angle) * dodge
     xpos <- xpos + dodge_x
     ypos <- ypos + dodge_y
   }
   if (!is.null(x$push)) {
     push <- convertHeight(x$push, 'mm', TRUE)
-    push_angle <- angle / 360 * 2 * pi
-    push_x <- cos(push_angle) * push
-    push_y <- sin(push_angle) * push
     xpos <- xpos + push_x
     ypos <- ypos + push_y
   }
-  if (x$force.rot) {
-    fix <- angle > 90 & angle < 270
-    angle[fix] <- angle[fix] + 180
-  }
   grob(
     label = x$label, x = unit(xpos, 'mm'), y = unit(ypos, 'mm'),
-    just = x$just, hjust = x$hjust, vjust = x$vjust, rot = angle,
+    just = x$just, hjust = x$hjust, vjust = x$vjust, rot = 0,
     check.overlap = x$check.overlap, name = x$name, gp = x$gp, vp = x$vp,
     cl = 'text'
   )
