@@ -51,6 +51,7 @@ textAlongGrob <- function(label, x = unit(0.5, 'npc'), y = unit(0.5, 'npc'),
 #' @export
 #' @keywords internal
 makeContent.textalong <- function(x) {
+  angle = 0
   x0 <- convertX(x$x0, 'mm', TRUE)
   y0 <- convertY(x$y0, 'mm', TRUE)
   x1 <- convertX(x$x1, 'mm', TRUE)
@@ -59,9 +60,23 @@ makeContent.textalong <- function(x) {
   ypos <- convertY(x$y, 'mm', TRUE)
   if (!is.null(x$dodge)) {
     dodge <- convertHeight(x$dodge, 'mm', TRUE)
+    dodge_angle <- (angle + 90) / 360 * 2 * pi
+    dodge_x <- cos(dodge_angle) * dodge
+    dodge_y <- sin(dodge_angle) * dodge
+    xpos <- xpos + dodge_x
+    ypos <- ypos + dodge_y
   }
   if (!is.null(x$push)) {
     push <- convertHeight(x$push, 'mm', TRUE)
+    push_angle <- angle / 360 * 2 * pi
+    push_x <- cos(push_angle) * push
+    push_y <- sin(push_angle) * push
+    xpos <- xpos + push_x
+    ypos <- ypos + push_y
+  }
+  if (x$force.rot) {
+    fix <- angle > 90 & angle < 270
+    angle[fix] <- angle[fix] + 180
   }
   grob(
     label = x$label, x = unit(xpos, 'mm'), y = unit(ypos, 'mm'),
